@@ -162,8 +162,6 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:cen
 .member-name{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:2px;margin-bottom:22px}
 
 /* FOUNDER — hidden by default */
-.founder-section .about-photos { display: none; }
-.founder-section.open .about-photos { display: flex; }
 .founder-trigger{background:var(--black);padding:64px 48px;text-align:center;border-top:1px solid rgba(255,255,255,.07)}
 .founder-btn{font-family:'Barlow Condensed',sans-serif;font-size:14px;font-weight:700;letter-spacing:4px;text-transform:uppercase;color:var(--white);background:transparent;border:2px solid var(--rust);padding:18px 44px;cursor:pointer;transition:all .3s;display:inline-flex;align-items:center;gap:12px}
 .founder-btn:hover{background:var(--rust);color:var(--black)}
@@ -282,8 +280,27 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.07);paddin
 .story-img-row img{width:100%;aspect-ratio:1;object-fit:cover;object-position:top;display:block}
 .story-caption{font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:2px;color:var(--ash);text-transform:uppercase;margin-bottom:18px;font-style:italic}
 
+
+.lang-selector{position:relative;}
+.lang-btn{font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:600;letter-spacing:2px;
+  text-transform:uppercase;color:var(--ash);background:transparent;
+  border:1px solid rgba(255,255,255,.15);padding:8px 14px;cursor:pointer;
+  transition:all .2s;display:flex;align-items:center;gap:6px;}
+.lang-btn:hover{color:var(--white);border-color:rgba(255,255,255,.3);}
+.lang-dropdown{display:none;position:absolute;top:100%;right:0;background:var(--iron);
+  border:1px solid rgba(255,255,255,.1);min-width:160px;z-index:300;margin-top:4px;}
+.lang-dropdown.open{display:block;}
+.lang-option{font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:1px;
+  color:var(--ash);padding:10px 16px;cursor:pointer;transition:all .2s;display:block;
+  border:none;background:transparent;width:100%;text-align:left;}
+.lang-option:hover{color:var(--white);background:var(--steel);}
+.lang-option.active{color:var(--rust);font-weight:700;}
+
 /* RESPONSIVE */
 @media(max-width:900px){
+  #iron-standard > div{grid-template-columns:1fr!important;}
+  #iron-standard > div > div{padding:52px 22px!important;}
+
   nav{padding:13px 20px}
   .nav-links{display:none}
   .section,.section-sm{padding:64px 22px}
@@ -316,11 +333,25 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.07);paddin
   <ul class="nav-links">
     <li><a href="#programs">Programs</a></li>
     <li><a href="#coaching">Coaching</a></li>
-    <li><a href="#membership">Membership</a></li>
+    <li><a href="#membership" onclick="closeProgramsPage()">Membership</a></li>
     <li><a href="#enroll">Enroll</a></li>
     <li><a href="#founder">About</a></li>
   </ul>
-  <a href="https://calendar.app.google/EU68WKdsb4JYVNzB8" target="_blank" class="nav-book">Book Consultation</a>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div class="lang-selector">
+      <button class="lang-btn" onclick="toggleLang()" id="langBtn">&#127760; EN &#9662;</button>
+      <div class="lang-dropdown" id="langDropdown">
+        <button class="lang-option active" onclick="setLang('en')">&#127482;&#127480; English</button>
+        <button class="lang-option" onclick="setLang('th')">&#127481;&#127469; Thai</button>
+        <button class="lang-option" onclick="setLang('zh')">&#127464;&#127475; Chinese</button>
+        <button class="lang-option" onclick="setLang('fr')">&#127467;&#127479; French</button>
+        <button class="lang-option" onclick="setLang('es')">&#127466;&#127480; Spanish</button>
+        <button class="lang-option" onclick="setLang('nl')">&#127475;&#127473; Dutch</button>
+        <button class="lang-option" onclick="setLang('ar')">&#127462;&#127466; Arabic</button>
+        <button class="lang-option" onclick="setLang('ru')">&#127479;&#127482; Russian</button>
+      </div>
+    </div>
+  </div>
 </nav>
 
 <!-- HERO -->
@@ -330,10 +361,9 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.07);paddin
     <h1 class="hero-title">BUILDING<br/><span class="accent">STRONGER</span><br/>MEN</h1>
     <div class="hero-divider"></div>
     <p class="hero-tagline">Discipline. Accountability. Leadership.</p>
-    <p class="hero-desc">Youth mentorship, accountability coaching, and a community built around discipline, leadership, and real growth. This is Iron Mind.</p>
+    <p class="hero-desc">Online mentorship for young men ages 12-18. Accountability coaching for adults. A community built on discipline, leadership, and real growth — serving families worldwide from Chiang Mai, Thailand.</p>
     <div class="hero-actions">
-      <a href="#programs" class="btn-primary">View Programs</a>
-      <a href="https://calendar.app.google/EU68WKdsb4JYVNzB8" target="_blank" class="btn-outline">Book Free Consultation</a>
+      <button onclick="openProgramsPage()" class="btn-primary" style="cursor:pointer;">View Programs</button>
     </div>
   </div>
   <div class="hero-right">
@@ -446,80 +476,143 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.07);paddin
 
 <!-- YOUTH MENTORSHIP -->
 <section class="section programs" id="programs">
-  <div class="reveal" style="margin-bottom:20px;">
-    <span class="label">Youth Development</span>
-    <h2 class="heading">YOUTH MENTORSHIP</h2>
+  <div class="reveal" style="margin-bottom:24px;">
+    <span class="label">Youth Development · Ages 12–18</span>
+    <h2 class="heading">IRON MIND YOUTH MENTORSHIP</h2>
+    <p class="body-text" style="margin-top:14px;max-width:720px;">Live 1-on-1 sessions for young men ages 12–18. Available in-person in Chiang Mai, Thailand and online worldwide. This is not personal training. This is mentorship through life development, fitness principles, and real accountability — 2 sessions per week, every week.</p>
   </div>
-  <div class="programs-compare reveal">
-    <p><strong>Who is this for?</strong> Young men ages 12–18 only. Parents are welcome in the consultation process — the program is designed for the young man.</p>
-    <p><strong>In-Person:</strong> Physical training, group activities, accountability, and real conversations inside and outside the gym — building confidence, emotional control, responsibility, and character.</p>
-    <p><strong>Online:</strong> Live sessions focused on mindset, leadership, emotional discipline, and real conversations for young men navigating pressure and personal growth from anywhere in the world.</p>
-  </div>
-  <div class="prog-cards">
-    <div class="pcard reveal">
-      <span class="pcard-badge">In-Person</span>
-      <h3 class="pcard-title">IRON MIND YOUTH MENTORING</h3>
-      <p class="pcard-meta">Ages 12–18 · 8 Weeks · 2x Per Week · In-Person</p>
-      <p class="pcard-desc">Physical training, group accountability, and real conversations. Built for young men who need structure, direction, and strong guidance.</p>
-      <ul class="week-list">
-        <li>Week 1 — Discipline & Identity</li><li>Week 2 — Physical Strength & Confidence</li>
-        <li>Week 3 — Emotional Control & Pressure</li><li>Week 4 — Responsibility & Accountability</li>
-        <li>Week 5 — Brotherhood & Leadership</li><li>Week 6 — Purpose & Direction</li>
-        <li>Week 7 — Resilience & Mental Toughness</li><li>Week 8 — Growth & Moving Forward</li>
-      </ul>
-      <div class="pcard-price">$300</div>
-      <span class="pcard-period">USD / Full 8-Week Program</span>
-      <p class="pcard-note">Consultation required before enrollment. Book a free call to get started.</p>
-      <div class="pcard-actions">
-        <button class="btn-outline" onclick="document.getElementById('modal-ip').classList.add('active')">View Full Curriculum →</button>
-      </div>
-    </div>
-    <div class="pcard reveal">
-      <span class="pcard-badge">Online</span>
-      <h3 class="pcard-title">IRON MIND ONLINE MENTORING</h3>
-      <p class="pcard-meta">Ages 12–18 · 8 Weeks · 2 Live Sessions Per Week</p>
-      <p class="pcard-desc">Live online mentorship focused on mindset, leadership, emotional discipline, and real conversations for young men anywhere in the world.</p>
-      <ul class="week-list">
-        <li>Week 1 — Discipline & Identity</li><li>Week 2 — Confidence Through Physical Discipline</li>
-        <li>Week 3 — Emotional Control & Social Pressure</li><li>Week 4 — Responsibility & Accountability</li>
-        <li>Week 5 — Brotherhood & Leadership</li><li>Week 6 — Purpose & Direction</li>
-        <li>Week 7 — Mental Toughness & Resilience</li><li>Week 8 — Long-Term Growth & Moving Forward</li>
-      </ul>
-      <div class="pcard-price">$197</div>
-      <span class="pcard-period">USD / Full 8-Week Program</span>
-      <p class="pcard-note">Consultation required before enrollment. Book a free call to get started.</p>
-      <div class="pcard-actions">
-        <button class="btn-outline" onclick="document.getElementById('modal-ol').classList.add('active')">View Full Curriculum →</button>
-      </div>
-    </div>
-  </div>
-</section>
 
-<!-- CONTINUED MENTORSHIP -->
-<section class="section-sm continued" id="continued">
-  <div class="reveal">
-    <span class="label">Beyond 8 Weeks</span>
-    <h2 class="subheading">CONTINUED MENTORSHIP</h2>
-    <p class="body-text" style="margin-top:12px;max-width:680px;">After completing the 8-week program, participants may continue with ongoing mentorship. Growth doesn't stop — and neither does the support.</p>
+  <div class="programs-compare reveal">
+    <p><strong>Who is this for?</strong> Young men ages 12–18 who need structure, direction, and a real mentor. Parents welcome in the consultation. The program is designed for the young man.</p>
+    <p><strong>In-Person (Chiang Mai):</strong> Face-to-face sessions combining physical fitness training alongside mentorship, life development, and accountability conversations.</p>
+    <p><strong>Online (Worldwide):</strong> Same curriculum, same accountability, same results — via live video call from anywhere in the world.</p>
   </div>
-  <div class="cont-grid">
-    <div class="ccard reveal">
-      <span class="ccard-badge ip">In-Person</span>
-      <h3 class="ccard-title">IN-PERSON CONTINUED MENTORSHIP</h3>
-      <div class="ccard-price">$200</div><span class="ccard-period">USD / Month</span>
-      <p class="ccard-desc">Ongoing in-person mentorship — accountability, leadership development, discipline, structure, fitness, and personal growth.</p>
-      <ul class="include-list"><li>Ongoing Accountability</li><li>Leadership Development</li><li>Fitness & Wellness Guidance</li><li>Group Discussions & Mentorship</li><li>Brotherhood & Community Building</li></ul>
-      <p class="ccard-tagline">Because growth doesn't stop after 8 weeks.</p>
-      <a href="https://buy.stripe.com/6oU3cv70RbSJ1Lccw74ow02" target="_blank" class="btn-primary" style="display:inline-block;">Enroll Now</a>
-    </div>
-    <div class="ccard reveal">
-      <span class="ccard-badge ol">Online</span>
-      <h3 class="ccard-title">ONLINE CONTINUED MENTORSHIP</h3>
-      <div class="ccard-price">$97</div><span class="ccard-period">USD / Month</span>
-      <p class="ccard-desc">Ongoing online mentorship — accountability, leadership, mindset development, discipline, and personal growth.</p>
-      <ul class="include-list"><li>Ongoing Accountability</li><li>Leadership & Mindset Development</li><li>Accountability Check-Ins</li><li>Real-Life Discussions & Guidance</li><li>Brotherhood & Community Building</li></ul>
-      <p class="ccard-tagline">Because discipline and leadership require consistency over time.</p>
-      <a href="https://buy.stripe.com/5kQaEX4SJ8Gx89AfIj4ow03" target="_blank" class="btn-primary" style="display:inline-block;">Enroll Now</a>
+
+  <div style="max-width:680px;margin:0 auto;">
+    <div class="pcard reveal">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;">
+        <span class="pcard-badge">In-Person · Chiang Mai</span>
+        <span class="pcard-badge" style="background:var(--steel);color:var(--rust);border:1px solid var(--rust);">Online · Worldwide</span>
+      </div>
+      <h3 class="pcard-title">2 SESSIONS PER WEEK · 1-ON-1</h3>
+      <p class="pcard-meta">Ages 12–18 · Live 1-on-1 · In-Person or Online · $75/wk · ฿2,442 THB/wk</p>
+      <p class="pcard-desc">Two live 1-on-1 sessions per week. Your son works directly with Antonio Green every session — same program, same accountability, same results whether in Chiang Mai or anywhere in the world.</p>
+
+      <div style="background:var(--black);padding:24px;margin-bottom:24px;border-top:3px solid var(--rust);">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--rust);font-weight:700;margin-bottom:10px;">Weekly Investment</div>
+        <div style="display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:8px;">
+          <span style="font-family:'Bebas Neue',sans-serif;font-size:60px;color:var(--rust);line-height:1;">$75</span>
+          <div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--ash);">USD per week</div>
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;letter-spacing:1px;color:var(--bone);font-weight:600;">฿2,442 THB per week</div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--ash);">Billed weekly · 4-week minimum · Continues week-to-week after Week 8 · Cancel anytime after minimum</div>
+      </div>
+
+      <!-- ONE BUTTON ONLY -->
+      <button onclick="toggleCurriculum()" id="currBtn" style="width:100%;background:var(--steel);border:1px solid rgba(255,255,255,.15);color:var(--white);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:all .2s;">
+        <span>View Full Curriculum</span>
+        <span id="currArrow" style="transition:transform .3s;">&#9660;</span>
+      </button>
+
+      <!-- EXPANDABLE CURRICULUM -->
+      <div id="curriculumExpand" style="display:none;background:var(--black);border:1px solid rgba(255,255,255,.08);border-top:none;padding:32px;">
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--rust);font-weight:700;margin-bottom:24px;">Complete 8-Week Curriculum</div>
+
+        
+        <div style="margin-bottom:22px;border-left:3px solid var(--rust);padding-left:18px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--white);margin-bottom:2px;">Week 1 — Building Discipline</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rust);margin-bottom:8px;">Foundation of Everything</div>
+          <div style="font-size:13px;color:var(--ash);line-height:1.7;margin-bottom:8px;">Discipline is not punishment — it is the foundation of freedom. We establish what discipline means, why it matters more than motivation, and how to build it through structure and routine.</div>
+          <div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Understanding personal responsibility — it starts with you</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Creating daily structure: morning routine, evening routine, weekly planning</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Developing habits that build momentum over time</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; The difference between discipline and motivation — and why one is reliable</div>
+          <div style="font-size:11px;color:var(--rust);padding:6px 10px;font-style:italic;margin-top:4px;">Homework: Track your morning routine for 7 days. Write down what you did before looking at your phone.</div>
+        </div>
+        <div style="margin-bottom:22px;border-left:3px solid var(--rust);padding-left:18px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--white);margin-bottom:2px;">Week 2 — Accountability</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rust);margin-bottom:8px;">Own Everything</div>
+          <div style="font-size:13px;color:var(--ash);line-height:1.7;margin-bottom:8px;">Accountability is not criticism — it is the pathway to growth. We tackle the excuse habit, learn what it means to fully own your actions, and build systems that keep you honest.</div>
+          <div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Ownership of actions, decisions, and results — no exceptions</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Tracking commitments: what you said vs. what you did</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Identifying and eliminating excuses that keep you stuck</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; How accountability builds trust — with yourself and others</div>
+          <div style="font-size:11px;color:var(--rust);padding:6px 10px;font-style:italic;margin-top:4px;">Homework: Write down 3 commitments you didn't keep. What was the real reason? Own it.</div>
+        </div>
+        <div style="margin-bottom:22px;border-left:3px solid var(--rust);padding-left:18px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--white);margin-bottom:2px;">Week 3 — Goal Setting</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rust);margin-bottom:8px;">Direction with Purpose</div>
+          <div style="font-size:13px;color:var(--ash);line-height:1.7;margin-bottom:8px;">A goal without a plan is just a wish. This week we set real goals — specific, time-bound, connected to your values — and build the action plan to reach them.</div>
+          <div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Short-term goals (30 days) and long-term goals (1-5 years)</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Creating specific action plans — not just intentions</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; How to measure progress honestly</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Connecting daily habits to your long-term vision</div>
+          <div style="font-size:11px;color:var(--rust);padding:6px 10px;font-style:italic;margin-top:4px;">Homework: Write your top 3 goals for the next 30 days. For each, write 3 specific actions you'll take this week.</div>
+        </div>
+        <div style="margin-bottom:22px;border-left:3px solid var(--rust);padding-left:18px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--white);margin-bottom:2px;">Week 4 — Fitness &amp; Life Principles</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rust);margin-bottom:8px;">Body &amp; Mind Connection</div>
+          <div style="font-size:13px;color:var(--ash);line-height:1.7;margin-bottom:8px;">Physical wellness is not about appearance — it is about building the mindset and energy required to perform at your best in every area of life. This is life principles through the lens of fitness.</div>
+          <div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; How physical wellness improves mental performance and emotional control</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Consistency over motivation — showing up when you don't feel like it</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Building healthy habits: sleep, nutrition basics, movement</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Discipline of taking care of your body as a form of self-respect</div>
+          <div style="font-size:11px;color:var(--rust);padding:6px 10px;font-style:italic;margin-top:4px;">Homework: Complete a physical challenge every morning this week. Report how it affected your mindset each day.</div>
+        </div>
+        <div style="margin-bottom:22px;border-left:3px solid var(--rust);padding-left:18px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--white);margin-bottom:2px;">Week 5 — Leadership Development</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rust);margin-bottom:8px;">Lead Yourself First</div>
+          <div style="font-size:13px;color:var(--ash);line-height:1.7;margin-bottom:8px;">Leadership is not a title — it is a responsibility. Before you can lead a family, team, or community, you must first learn to lead yourself.</div>
+          <div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; What it means to lead yourself before leading others</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Communication skills — how you speak reveals who you are</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Decision-making: how disciplined people make choices under pressure</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Leading at home as a son, brother, and family member</div>
+          <div style="font-size:11px;color:var(--rust);padding:6px 10px;font-style:italic;margin-top:4px;">Homework: Lead one thing this week — at home, at school, or in your community. Write down what happened.</div>
+        </div>
+        <div style="margin-bottom:22px;border-left:3px solid var(--rust);padding-left:18px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--white);margin-bottom:2px;">Week 6 — Mental Toughness</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rust);margin-bottom:8px;">The Hard Part Is the Point</div>
+          <div style="font-size:13px;color:var(--ash);line-height:1.7;margin-bottom:8px;">Mental toughness is not the absence of struggle — it is the decision to keep going through it. We build the mental framework that separates people who quit from those who don't.</div>
+          <div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Handling adversity: what to do when life doesn't go as planned</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Developing resilience — building back stronger after setbacks</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Stress management: practical tools for staying calm under pressure</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Controlling the conversation inside your head</div>
+          <div style="font-size:11px;color:var(--rust);padding:6px 10px;font-style:italic;margin-top:4px;">Homework: Do one hard thing every day this week that you don't want to do. Log each one.</div>
+        </div>
+        <div style="margin-bottom:22px;border-left:3px solid var(--rust);padding-left:18px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--white);margin-bottom:2px;">Week 7 — Confidence &amp; Self-Respect</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rust);margin-bottom:8px;">Built, Not Given</div>
+          <div style="font-size:13px;color:var(--ash);line-height:1.7;margin-bottom:8px;">Confidence is not something you find — it is something you build through consistent action. Every time you do what you said you would do, you build belief in yourself.</div>
+          <div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Building self-belief through consistent follow-through</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Personal presentation: how you carry yourself, speak, and show up</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Creating personal standards — what you will and won't accept from yourself</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Self-respect as a foundation for how others treat you</div>
+          <div style="font-size:11px;color:var(--rust);padding:6px 10px;font-style:italic;margin-top:4px;">Homework: Write your personal standards: 5 things you commit to doing and 5 things you commit to never doing.</div>
+        </div>
+        <div style="margin-bottom:22px;border-left:3px solid var(--rust);padding-left:18px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--white);margin-bottom:2px;">Week 8 — Long-Term Success Plan</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rust);margin-bottom:8px;">This Is Just the Beginning</div>
+          <div style="font-size:13px;color:var(--ash);line-height:1.7;margin-bottom:8px;">Week 8 is not an ending — it is a launch point. We celebrate what was built, measure real growth, and create a long-term plan that keeps momentum going well beyond the program.</div>
+          <div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Measuring real growth — comparing Week 8 to Week 1</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Creating a lifelong accountability system that doesn't rely on a coach</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Building a personal development plan for the next 90 days</div>
+<div style="font-size:12px;color:var(--bone);padding:5px 10px;background:var(--steel);margin-bottom:2px;">&#10022; Continued growth: ongoing mentorship and the Iron Mind community</div>
+          <div style="font-size:11px;color:var(--rust);padding:6px 10px;font-style:italic;margin-top:4px;">Homework: Write a letter to yourself to open in 6 months. Seal it. Keep it somewhere safe.</div>
+        </div>
+
+        <div style="background:var(--steel);padding:14px 18px;border-left:3px solid var(--rust);margin-bottom:28px;">
+          <div style="font-size:13px;color:var(--rust);font-style:italic;">After Week 8 — continues week-to-week at the same rate. No new contract. No re-enrollment. Growth does not stop and neither does the accountability.</div>
+        </div>
+
+        <!-- BUTTONS AT BOTTOM OF CURRICULUM ONLY -->
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <a href="https://calendar.app.google/EU68WKdsb4JYVNzB8" target="_blank" class="btn-primary" style="text-align:center;display:block;">Book Free Consultation</a>
+          <a href="https://buy.stripe.com/3cI9AT0CtcWNblMcw74ow06" target="_blank" class="btn-outline" style="text-align:center;display:block;">Pay Now</a>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -527,43 +620,118 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.07);paddin
 <!-- ACCOUNTABILITY COACHING -->
 <section class="section coaching" id="coaching">
   <div class="reveal" style="max-width:860px;margin:0 auto;">
-    <span class="label">Accountability Coaching</span>
-    <h2 class="heading" style="font-size:clamp(32px,4vw,52px);margin-bottom:8px;">This ain't influencer coaching.</h2>
+    <span class="label">For Adults · Men &amp; Women</span>
+    <h2 class="heading" style="font-size:clamp(32px,4vw,52px);margin-bottom:8px;">IRON MIND ACCOUNTABILITY COACHING</h2>
     <div class="coaching-statements">
-      <div class="coaching-stmt">No fake motivation.</div>
-      <div class="coaching-stmt">No pretending the work is easy.</div>
-      <div class="coaching-stmt">No excuses. No starting over.</div>
+      <div class="coaching-stmt">This is not fake motivation.</div>
+      <div class="coaching-stmt">This is not pretending the work is easy.</div>
+      <div class="coaching-stmt">This is real accountability. Real results.</div>
     </div>
-    <p class="body-text" style="margin:20px 0 16px;">IRON MIND Accountability Coaching is built around old-school discipline, structure, consistency, and honest accountability — helping men and women stay committed to their goals through real coaching and real conversations.</p>
-    <p style="font-size:14px;font-style:italic;color:var(--bone);border-left:3px solid var(--rust);padding-left:14px;line-height:1.6;margin-bottom:32px;">Because real change isn't built through comfort. It's built through pressure, discipline, and consistency.</p>
+    <p class="body-text" style="margin:20px 0 16px;">Iron Mind Accountability Coaching is a direct, ongoing coaching relationship built around your specific goals, your real obstacles, and your actual life. Two live calls per week — every week — with Antonio Green personally. Not a program. Not a course. Real coaching.</p>
+    <p style="font-size:14px;font-style:italic;color:var(--bone);border-left:3px solid var(--rust);padding-left:14px;line-height:1.6;margin-bottom:36px;">Real change is not built through comfort. It is built through pressure, discipline, and consistent accountability.</p>
 
-    <div style="background:var(--iron);border-top:3px solid var(--rust);padding:36px;margin-bottom:28px;">
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:20px;margin-bottom:24px;">
+    <!-- PRICE BOX -->
+    <div style="background:var(--iron);border-top:3px solid var(--rust);padding:32px;margin-bottom:28px;">
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--rust);font-weight:700;margin-bottom:10px;">One Rate · No Tiers · No Upsells</div>
+      <div style="display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:8px;">
+        <span style="font-family:'Bebas Neue',sans-serif;font-size:72px;color:var(--rust);line-height:1;">$150</span>
         <div>
-          <span style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--rust);font-weight:700;display:block;margin-bottom:6px;">For Men &amp; Women</span>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,3vw,40px);letter-spacing:1px;line-height:1;">IRON MIND ACCOUNTABILITY COACHING</div>
-        </div>
-        <div style="text-align:right;">
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:72px;color:var(--rust);line-height:1;">$375</div>
-          <span style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--ash);">USD / Month</span>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;letter-spacing:2px;text-transform:uppercase;color:var(--ash);">USD per week</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;letter-spacing:1px;color:var(--bone);font-weight:600;">&#3647;4,886 THB per week</div>
         </div>
       </div>
-      <div style="background:var(--steel);padding:18px 22px;margin-bottom:0;">
-        <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--rust);font-weight:700;margin-bottom:12px;">Every Month Includes</div>
-        <ul class="include-list" style="margin-bottom:0;display:grid;grid-template-columns:1fr 1fr;gap:0 20px;">
-          <li>2 Accountability Calls Per Week</li>
-          <li>Fitness Accountability</li>
-          <li>Mindset Support</li>
-          <li>Discipline Coaching</li>
-          <li>Habit Tracking</li>
-          <li>Consistency Coaching</li>
-          <li>Lifestyle Structure</li>
-          <li>Weekly Goal Planning</li>
-        </ul>
-      </div>
+      <div style="font-size:13px;color:var(--ash);margin-bottom:20px;">2 live calls per week · Billed weekly · 4-week minimum · Cancel anytime after minimum</div>
+      <ul class="include-list" style="margin-bottom:0;display:grid;grid-template-columns:1fr 1fr;gap:0 20px;">
+        <li>2 live video calls per week</li>
+        <li>Goal setting &amp; accountability review</li>
+        <li>Mindset &amp; discipline coaching</li>
+        <li>Fitness accountability</li>
+        <li>Habit tracking &amp; lifestyle structure</li>
+        <li>Direct access to Antonio Green</li>
+      </ul>
     </div>
 
-    <button class="btn-primary" style="width:100%;text-align:center;" onclick="document.getElementById('modal-coaching').classList.add('active')">View Full Program →</button>
+    <!-- VIEW FULL PROGRAM BUTTON -->
+    <button onclick="toggleCoachingDetails()" id="coachingBtn" style="width:100%;background:var(--steel);border:1px solid rgba(255,255,255,.15);color:var(--white);font-family:'Barlow Condensed',sans-serif;font-size:13px;font-weight:700;letter-spacing:3px;text-transform:uppercase;padding:16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:all .2s;">
+      <span>View Full Program</span>
+      <span id="coachingArrow" style="transition:transform .3s;">&#9660;</span>
+    </button>
+
+    <!-- EXPANDABLE DETAILS -->
+    <div id="coachingExpand" style="display:none;background:var(--black);border:1px solid rgba(255,255,255,.08);border-top:none;padding:32px;">
+      
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--rust);font-weight:700;margin-bottom:24px;">What Accountability Coaching Is</div>
+
+        <div style="margin-bottom:22px;border-left:3px solid var(--rust);padding-left:18px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--white);margin-bottom:6px;">What It Is</div>
+          <div style="font-size:13px;color:var(--ash);line-height:1.8;">Accountability coaching is a direct, ongoing coaching relationship between you and Antonio Green. Two live calls per week — every week. No scripts, no canned advice, no pre-recorded videos. Real conversations built around your specific goals, your real obstacles, and your actual life. Every call has a purpose. Every week you move forward.</div>
+        </div>
+
+        <div style="margin-bottom:22px;border-left:3px solid var(--rust);padding-left:18px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--white);margin-bottom:6px;">What It Is Not</div>
+          <div style="font-size:13px;color:var(--ash);line-height:1.8;">This is not motivational speaking. This is not a course you watch at your own pace. This is not a program where you get a PDF and a Facebook group. This is real, direct accountability — the kind that requires you to show up, do the work, and answer for your results every single week.</div>
+        </div>
+
+        <div style="margin-bottom:22px;border-left:3px solid var(--rust);padding-left:18px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--white);margin-bottom:6px;">Who It Is For</div>
+          <div style="font-size:13px;color:var(--ash);line-height:1.8;">Men and women who have goals they keep missing. People who know what they need to do but struggle to stay consistent. Anyone who is tired of starting over, tired of making promises to themselves they don't keep, and ready to have someone in their corner who will hold them to a higher standard — every week, without excuses.</div>
+        </div>
+
+        <div style="margin-bottom:22px;border-left:3px solid var(--rust);padding-left:18px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--white);margin-bottom:6px;">What Every Week Looks Like</div>
+          <div style="font-size:13px;color:var(--ash);line-height:1.8;margin-bottom:12px;">Two live video calls per week — one at the beginning of the week to set your goals, commitments, and targets, and one mid-week or at the end of the week to review what you did and what you didn't. No hiding. No rescheduling as a way to avoid accountability. You show up, you report, and you move forward.</div>
+          <div style="display:flex;flex-direction:column;gap:4px;">
+            <div style="font-size:12px;color:var(--bone);padding:6px 10px;background:var(--steel);">&#10022; Goal setting call — define your week, set your commitments, identify your obstacles</div>
+            <div style="font-size:12px;color:var(--bone);padding:6px 10px;background:var(--steel);">&#10022; Accountability review — did you do what you said? What happened? What changes?</div>
+            <div style="font-size:12px;color:var(--bone);padding:6px 10px;background:var(--steel);">&#10022; Mindset coaching — address what is getting in your way mentally</div>
+            <div style="font-size:12px;color:var(--bone);padding:6px 10px;background:var(--steel);">&#10022; Discipline coaching — building the habits and structure that create consistent results</div>
+            <div style="font-size:12px;color:var(--bone);padding:6px 10px;background:var(--steel);">&#10022; Lifestyle accountability — fitness, health, relationships, finances — all of it matters</div>
+            <div style="font-size:12px;color:var(--bone);padding:6px 10px;background:var(--steel);">&#10022; Direct feedback — honest, respectful, and designed to help you grow</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:22px;border-left:3px solid var(--rust);padding-left:18px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--white);margin-bottom:6px;">Areas We Work On</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px;">
+            <div style="font-size:12px;color:var(--bone);padding:6px 10px;background:var(--steel);">&#10022; Personal goals &amp; vision</div>
+            <div style="font-size:12px;color:var(--bone);padding:6px 10px;background:var(--steel);">&#10022; Daily habits &amp; routines</div>
+            <div style="font-size:12px;color:var(--bone);padding:6px 10px;background:var(--steel);">&#10022; Fitness &amp; physical wellness</div>
+            <div style="font-size:12px;color:var(--bone);padding:6px 10px;background:var(--steel);">&#10022; Mindset &amp; mental toughness</div>
+            <div style="font-size:12px;color:var(--bone);padding:6px 10px;background:var(--steel);">&#10022; Time management &amp; productivity</div>
+            <div style="font-size:12px;color:var(--bone);padding:6px 10px;background:var(--steel);">&#10022; Leadership &amp; personal standards</div>
+            <div style="font-size:12px;color:var(--bone);padding:6px 10px;background:var(--steel);">&#10022; Relationships &amp; communication</div>
+            <div style="font-size:12px;color:var(--bone);padding:6px 10px;background:var(--steel);">&#10022; Business &amp; financial discipline</div>
+            <div style="font-size:12px;color:var(--bone);padding:6px 10px;background:var(--steel);">&#10022; Long-term consistency</div>
+            <div style="font-size:12px;color:var(--bone);padding:6px 10px;background:var(--steel);">&#10022; Eliminating excuses permanently</div>
+          </div>
+        </div>
+
+        <div style="margin-bottom:22px;border-left:3px solid var(--rust);padding-left:18px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--white);margin-bottom:6px;">What You Can Expect</div>
+          <div style="font-size:13px;color:var(--ash);line-height:1.8;">In the first week — clarity. You will know exactly what you are working toward, what is getting in your way, and what changes starting immediately. By week four — consistency. The habits are forming, the excuses are shrinking, and the results are becoming visible. Week by week — momentum. Real, sustainable change built through discipline and accountability — not shortcuts and hype.</div>
+        </div>
+
+        <div style="margin-bottom:28px;border-left:3px solid var(--rust);padding-left:18px;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--white);margin-bottom:6px;">The Investment</div>
+          <div style="font-size:13px;color:var(--ash);line-height:1.8;margin-bottom:10px;">One rate. No tiers. No upsells. Two calls per week, every week, for as long as you are in the program. Billed weekly. Cancel anytime after your 4-week minimum with one week notice.</div>
+          <div style="background:var(--steel);padding:20px;display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;">
+            <span style="font-family:'Bebas Neue',sans-serif;font-size:56px;color:var(--rust);line-height:1;">$150</span>
+            <div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:13px;letter-spacing:2px;text-transform:uppercase;color:var(--ash);">USD per week</div>
+              <div style="font-family:'Barlow Condensed',sans-serif;font-size:15px;letter-spacing:1px;color:var(--bone);font-weight:600;">&#3647;4,886 THB per week</div>
+              <div style="font-size:11px;color:var(--ash);margin-top:4px;">2 live calls/week · Billed weekly · 4-week minimum</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BUTTONS AT BOTTOM -->
+        <div style="display:flex;flex-direction:column;gap:10px;">
+          <a href="https://calendar.app.google/EU68WKdsb4JYVNzB8" target="_blank" class="btn-primary" style="text-align:center;display:block;">Book Free Consultation</a>
+          <a href="https://buy.stripe.com/cNi9ATbh74qhexY1Rt4ow08" target="_blank" class="btn-outline" style="text-align:center;display:block;">Pay Now</a>
+        </div>
+
+    </div>
+
   </div>
 </section>
 
@@ -590,37 +758,59 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.07);paddin
       <p class="body-text" style="margin-bottom:28px;">Monthly live calls. Real conversations. A network of disciplined people committed to becoming better in every area of life.</p>
     </div>
     <div class="member-card reveal">
-      <div class="member-price">FREE</div>
-      <span class="member-period">Join the Community</span>
+      <div class="member-price" style="font-size:72px;">$15</div>
+      <div style="font-family:'Barlow Condensed',sans-serif;font-size:16px;letter-spacing:2px;color:var(--bone);font-weight:600;margin-bottom:4px;">&#3647;488 THB</div>
+      <span class="member-period">Per Month · Billed Monthly</span>
       <div class="member-badge">🔒 Founding Members Rate — Locked In Forever</div>
       <div class="member-name">IRON MIND MEMBERSHIP</div>
       <ul class="include-list">
         <li>Monthly Live Calls</li><li>Networking with Like-Minded People</li>
         <li>Leadership Discussions</li><li>Personal Development Topics</li>
         <li>Faith, Fitness, Business & Relationships</li><li>Growth Conversations</li>
-        <li>Discounts on All Programs</li>
+        
       </ul>
-      <a href="https://buy.stripe.com/dRmdR9gBr9KBcpQ9jV4ow05" target="_blank" class="btn-primary" style="display:block;text-align:center;">Join Iron Mind Membership — Free</a>
+      <a href="https://buy.stripe.com/3cI14ngBraOFahIcw74ow07" target="_blank" class="btn-primary" style="display:block;text-align:center;">Join Iron Mind Membership — $15/Month</a>
     </div>
   </div>
 </section>
 
-<!-- FATHERS FORGE FAMILIES -->
-<section class="section fathers" id="fathers">
-  <div class="fathers-grid">
-    <div class="fathers-content reveal">
-      
-      <h2 class="fathers-title">FATHERS<br/><em>FORGE</em><br/>FAMILIES</h2>
-      <div class="rule"></div>
-      <p class="body-text" style="margin-bottom:16px;">Most coaches can talk about reps and diets. Very few can speak on what it means to lead a home, raise a daughter, love a wife, and show up every single day — in the gym and at the dinner table.</p>
-      <p class="body-text" style="margin-bottom:28px;">The strongest thing a man can build isn't a physique. It's a family.</p>
-      <div class="fathers-pillars">
-        <div class="fp"><span class="fp-num">01</span><div><div class="fp-title">Lead Your Home</div><div class="fp-text">Build the structure and presence your family needs.</div></div></div>
-        <div class="fp"><span class="fp-num">02</span><div><div class="fp-title">Build Physical Discipline</div><div class="fp-text">Your health is your responsibility to yourself and your family.</div></div></div>
-        <div class="fp"><span class="fp-num">03</span><div><div class="fp-title">Strengthen Relationships</div><div class="fp-text">Emotional discipline and presence make stronger husbands and fathers.</div></div></div>
-        <div class="fp"><span class="fp-num">04</span><div><div class="fp-title">Become the Role Model</div><div class="fp-text">Your children are watching. Lead with action, not words.</div></div></div>
-        <div class="fp"><span class="fp-num">05</span><div><div class="fp-title">Build Your Legacy</div><div class="fp-text">The strongest thing you'll ever build is the life your family inherits.</div></div></div>
+
+<!-- INSPIRATIONAL SECTION -->
+<section style="background:var(--black);padding:0;overflow:hidden;" id="iron-standard">
+  <div style="display:grid;grid-template-columns:1fr 1fr;">
+
+    <!-- LEFT — dark panel with quote -->
+    <div style="background:var(--iron);padding:80px 56px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden;">
+      <div style="position:absolute;top:-40px;left:-30px;font-family:'Bebas Neue',sans-serif;font-size:320px;color:rgba(255,255,255,.025);line-height:1;user-select:none;pointer-events:none;">IM</div>
+      <div style="position:relative;z-index:2;">
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:6px;text-transform:uppercase;color:var(--rust);font-weight:700;display:block;margin-bottom:24px;">The Iron Mind Standard</span>
+        <div style="width:48px;height:3px;background:var(--rust);margin-bottom:32px;"></div>
+        <blockquote style="font-family:'Bebas Neue',sans-serif;font-size:clamp(32px,4vw,52px);letter-spacing:2px;line-height:1.05;color:var(--white);margin-bottom:20px;">"THE ONLY PERSON YOU ARE DESTINED TO BECOME IS THE PERSON YOU DECIDE TO BE."</blockquote>
+        <div style="font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:4px;text-transform:uppercase;color:var(--rust);font-weight:700;margin-bottom:48px;">Ralph Waldo Emerson</div>
+        <div style="font-size:15px;color:var(--ash);line-height:1.9;font-weight:300;max-width:480px;">
+          Iron Mind was not built on talent. It was not built on luck or natural gifts. It was built on a decision — the decision to stop accepting less than what was possible and start becoming what was required.
+        </div>
       </div>
+    </div>
+
+    <!-- RIGHT — three principle cards -->
+    <div style="display:flex;flex-direction:column;">
+
+      <div style="background:var(--rust);padding:52px 48px;flex:1;display:flex;flex-direction:column;justify-content:center;" class="reveal">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--black);letter-spacing:2px;line-height:1;margin-bottom:12px;">DISCIPLINE IS THE BRIDGE</div>
+        <div style="font-size:14px;color:rgba(0,0,0,.65);line-height:1.8;font-weight:400;">Between who you are today and who you are capable of becoming. Every choice, every habit, every decision made in the right direction is a brick in that bridge. Build it every single day.</div>
+      </div>
+
+      <div style="background:var(--steel);padding:52px 48px;flex:1;display:flex;flex-direction:column;justify-content:center;" class="reveal">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--white);letter-spacing:2px;line-height:1;margin-bottom:12px;">ACCOUNTABILITY IS THE ACCELERATOR</div>
+        <div style="font-size:14px;color:var(--ash);line-height:1.8;font-weight:300;">When someone holds you to your word — really holds you — you move faster, grow stronger, and go further than you ever would alone. That is what Iron Mind does. Every week.</div>
+      </div>
+
+      <div style="background:var(--black);border-top:3px solid var(--rust);padding:52px 48px;flex:1;display:flex;flex-direction:column;justify-content:center;" class="reveal">
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:48px;color:var(--rust);letter-spacing:2px;line-height:1;margin-bottom:12px;">YOUR PAST DOES NOT DEFINE YOU</div>
+        <div style="font-size:14px;color:var(--ash);line-height:1.8;font-weight:300;">Where you started, what you went through, the mistakes you made — none of it determines where you are going. Your decisions from this moment forward do. That is the only thing that has ever mattered.</div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -629,99 +819,14 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.07);paddin
 <section class="section enroll-section" id="enroll">
   <div class="reveal" style="text-align:center;">
     <span class="label">Ready to Commit</span>
-    <h2 class="heading">ENROLL NOW</h2>
-    <p class="body-text" style="max-width:520px;margin:16px auto 32px;">Already had your consultation? Select your program and lock in your spot. Discipline starts with the decision.</p>
-    <button class="btn-primary" style="font-size:15px;padding:20px 56px;" onclick="document.getElementById('modal-programs').classList.add('active')">Select Your Program →</button>
-  </div>
-</section>
-
-<!-- PROGRAMS MODAL -->
-<div id="modal-programs" class="modal-overlay">
-  <div class="modal-box" style="max-width:680px;">
-    <button class="modal-close" onclick="document.getElementById('modal-programs').classList.remove('active')">✕ Close</button>
-    <span class="modal-label">Enroll Now</span>
-    <h2 class="modal-title">SELECT YOUR PROGRAM</h2>
-    <p class="modal-meta">Already had your consultation? Choose below and enroll.</p>
-    <p style="font-size:13px;color:var(--ash);margin-bottom:28px;">Need a consultation first? <a href="https://calendar.app.google/EU68WKdsb4JYVNzB8" target="_blank" style="color:var(--rust);font-weight:700;">Book your free call here →</a></p>
-
-    <div style="display:flex;flex-direction:column;gap:2px;">
-
-      <div style="background:var(--steel);padding:20px 24px;border-left:3px solid var(--rust);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-        <div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--rust);font-weight:700;margin-bottom:4px;">Youth Mentorship · Ages 12–18</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;">Youth Mentoring — In-Person</div>
-          <div style="font-size:12px;color:var(--ash);font-weight:300;">8 Weeks · 2x Per Week</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-          <span style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--rust);">$300</span>
-          <a href="https://buy.stripe.com/3cIeVdgBr7Ct89A7bN4ow00" target="_blank" class="btn-primary" style="padding:12px 24px;">Enroll Now</a>
-        </div>
-      </div>
-
-      <div style="background:var(--steel);padding:20px 24px;border-left:3px solid var(--rust);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-        <div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--rust);font-weight:700;margin-bottom:4px;">Youth Mentorship · Ages 12–18</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;">Youth Mentoring — Online</div>
-          <div style="font-size:12px;color:var(--ash);font-weight:300;">8 Weeks · 2 Live Sessions Per Week</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-          <span style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--rust);">$197</span>
-          <a href="https://buy.stripe.com/5kQ3cv4SJ0a1blM7bN4ow01" target="_blank" class="btn-primary" style="padding:12px 24px;">Enroll Now</a>
-        </div>
-      </div>
-
-      <div style="background:var(--steel);padding:20px 24px;border-left:3px solid var(--rust);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-        <div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--rust);font-weight:700;margin-bottom:4px;">Continued Mentorship</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;">Continued Mentorship — In-Person</div>
-          <div style="font-size:12px;color:var(--ash);font-weight:300;">Monthly · Ongoing Support</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-          <span style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--rust);">$200<span style="font-size:16px;">/mo</span></span>
-          <a href="https://buy.stripe.com/6oU3cv70RbSJ1Lccw74ow02" target="_blank" class="btn-primary" style="padding:12px 24px;">Enroll Now</a>
-        </div>
-      </div>
-
-      <div style="background:var(--steel);padding:20px 24px;border-left:3px solid var(--rust);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-        <div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--rust);font-weight:700;margin-bottom:4px;">Continued Mentorship</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;">Continued Mentorship — Online</div>
-          <div style="font-size:12px;color:var(--ash);font-weight:300;">Monthly · Ongoing Support</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-          <span style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--rust);">$97<span style="font-size:16px;">/mo</span></span>
-          <a href="https://buy.stripe.com/5kQaEX4SJ8Gx89AfIj4ow03" target="_blank" class="btn-primary" style="padding:12px 24px;">Enroll Now</a>
-        </div>
-      </div>
-
-      <div style="background:var(--steel);padding:20px 24px;border-left:3px solid var(--rust);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-        <div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--rust);font-weight:700;margin-bottom:4px;">Accountability Coaching · Men &amp; Women</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;">Iron Mind Accountability Coaching</div>
-          <div style="font-size:12px;color:var(--ash);font-weight:300;">Monthly · 2 Calls Per Week</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-          <span style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--rust);">$375<span style="font-size:16px;">/mo</span></span>
-          <a href="https://buy.stripe.com/6oU6oHfxncWN4XofIj4ow04" target="_blank" class="btn-primary" style="padding:12px 24px;">Enroll Now</a>
-        </div>
-      </div>
-
-      <div style="background:var(--iron);padding:20px 24px;border-left:3px solid var(--rust);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
-        <div>
-          <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--rust);font-weight:700;margin-bottom:4px;">Community · Open to All</div>
-          <div style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:1px;">Iron Mind Membership</div>
-          <div style="font-size:12px;color:var(--ash);font-weight:300;">Monthly Live Calls · Leadership · Growth</div>
-        </div>
-        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;">
-          <span style="font-family:'Bebas Neue',sans-serif;font-size:36px;color:var(--rust);">FREE</span>
-          <a href="https://buy.stripe.com/dRmdR9gBr9KBcpQ9jV4ow05" target="_blank" class="btn-primary" style="padding:12px 24px;">Join Now</a>
-        </div>
-      </div>
-
+    <h2 class="heading">SELECT YOUR PROGRAM</h2>
+    <p class="body-text" style="max-width:520px;margin:16px auto 36px;">All programs billed weekly. No large upfront payments. No long contracts. Both in-person and online available.</p>
+    <div class="enroll-box" style="max-width:480px;margin:0 auto;padding:44px;text-align:center;">
+      <h3 style="font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:1px;line-height:1;margin-bottom:28px;">CHOOSE &amp; ENROLL</h3>
+      <button onclick="openProgramsPage()" class="btn-dark-solid" style="display:block;width:100%;text-align:center;font-size:14px;padding:18px 36px;cursor:pointer;">Select Your Program &#8594;</button>
     </div>
   </div>
-</div>
-
+</section>
 
 <!-- MEET THE FOUNDER — hidden until button click -->
 <div class="founder-trigger" id="founder">
@@ -765,9 +870,12 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.07);paddin
   </div>
 </div>
 
+
 <!-- CTA BANNER -->
 <div class="cta-banner" style="justify-content:center;text-align:center;">
   <h2 class="cta-title">FORGED BY IRON.<br/>BUILT FOR FAMILY.</h2>
+</div>
+  <a href="https://calendar.app.google/EU68WKdsb4JYVNzB8" target="_blank" class="btn-dark">Book Free Consultation</a>
 </div>
 
 <!-- FOOTER -->
@@ -780,31 +888,32 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.07);paddin
     <div class="footer-links">
       <div class="footer-col">
         <div class="footer-col-title">Programs</div>
-        <a href="#programs">Youth Mentorship</a>
-        <a href="#continued">Continued Mentorship</a>
-        <a href="#coaching">Accountability Coaching</a>
-        <a href="#membership">Iron Mind Membership</a>
+        <a href="javascript:void(0)" onclick="openProgramsPage()">All Programs</a>
+        <a href="#programs" onclick="document.getElementById('programsPage').style.display='none'">Youth Mentorship</a>
+        <a href="#coaching" onclick="document.getElementById('programsPage').style.display='none'">Accountability Coaching</a>
+        <a href="#membership" onclick="document.getElementById('programsPage').style.display='none'">Iron Mind Membership</a>
       </div>
       <div class="footer-col">
-        <div class="footer-col-title">Brand</div>
-        <a href="#philosophy">Philosophy</a>
-        <a href="#fathers">Fathers</a>
-        <a href="#testimonials">Testimonials</a>
-        <a href="#founder">Meet the Founder</a>
+        <div class="footer-col-title">Explore</div>
+        <a href="#philosophy" onclick="document.getElementById('programsPage').style.display='none'">Philosophy</a>
+        <a href="#testimonials" onclick="document.getElementById('programsPage').style.display='none'">Testimonials</a>
+        <a href="#founder" onclick="document.getElementById('programsPage').style.display='none'">Meet the Founder</a>
+        <a href="#enroll" onclick="document.getElementById('programsPage').style.display='none'">Get Started</a>
       </div>
       <div class="footer-col">
         <div class="footer-col-title">Connect</div>
         <a href="https://calendar.app.google/EU68WKdsb4JYVNzB8" target="_blank">Book Consultation</a>
-        <a href="#enroll">Enroll Now</a>
-        <a href="#membership">Join Membership</a>
-        <a href="#email-signup">Email List</a>
+        <a href="javascript:void(0)" onclick="openProgramsPage()">Enroll Now</a>
+        <a href="#membership" onclick="document.getElementById('programsPage').style.display='none'">Join Membership</a>
+        <a href="https://wa.me/66614627101" target="_blank">WhatsApp</a>
+        <a href="https://wa.me/66614627101" target="_blank" style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;color:var(--ash);text-decoration:none;">+66 61 462 7101</a>
       </div>
     </div>
   </div>
   <div class="footer-bottom">
     <div>
       <p class="footer-copy">© 2026 IRON MIND. ALL RIGHTS RESERVED.</p>
-      <p style="font-family:'Barlow Condensed',sans-serif;font-size:12px;letter-spacing:2px;color:rgba(255,255,255,0.3);margin-top:6px;">Antonio Green, Founder — Iron Mind</p>
+      <p style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:1px;color:rgba(255,255,255,0.25);margin-top:4px;">Antonio Green, Founder — Iron Mind · Serving families worldwide · Based in Chiang Mai, Thailand</p>
     </div>
     <div class="footer-socials">
       <a href="#">Instagram</a><a href="#">YouTube</a><a href="#">TikTok</a><a href="#">X</a>
@@ -831,10 +940,10 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.07);paddin
       <div class="mweek"><div class="mweek-num">Week 8</div><div class="mweek-title">Growth & Moving Forward</div><p class="mweek-desc">Reflection, long-term discipline, and understanding that strength is a lifelong journey.</p></div>
     </div>
     <div class="modal-footer">
-      <div><div class="modal-price">$300</div><div class="modal-price-label">USD / Full 8-Week Program</div></div>
+      <div><div class="modal-price">$225</div><div class="modal-price-label">Founding Family Rate (Reg. $300)</div></div>
       <div style="display:flex;flex-direction:column;gap:10px;">
         <a href="https://calendar.app.google/EU68WKdsb4JYVNzB8" target="_blank" class="btn-primary">Book Free Consultation</a>
-        <a href="https://buy.stripe.com/3cIeVdgBr7Ct89A7bN4ow00" target="_blank" class="btn-outline">Enroll Now</a>
+        <a href="https://buy.stripe.com/3cIeVdgBr7Ct89A7bN4ow00" target="_blank" class="btn-outline">Enroll Now — $225</a>
       </div>
     </div>
   </div>
@@ -858,10 +967,10 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.07);paddin
       <div class="mweek"><div class="mweek-num">Week 8</div><div class="mweek-title">Long-Term Growth & Moving Forward</div><p class="mweek-desc">Long-term habits, leadership, self-development, staying accountable.</p></div>
     </div>
     <div class="modal-footer">
-      <div><div class="modal-price">$197</div><div class="modal-price-label">USD / Full 8-Week Program</div></div>
+      <div><div class="modal-price">$148</div><div class="modal-price-label">Founding Family Rate (Reg. $197)</div></div>
       <div style="display:flex;flex-direction:column;gap:10px;">
         <a href="https://calendar.app.google/EU68WKdsb4JYVNzB8" target="_blank" class="btn-primary">Book Free Consultation</a>
-        <a href="https://buy.stripe.com/5kQ3cv4SJ0a1blM7bN4ow01" target="_blank" class="btn-outline">Enroll Now</a>
+        <a href="https://buy.stripe.com/5kQ3cv4SJ0a1blM7bN4ow01" target="_blank" class="btn-outline">Enroll Now — $148</a>
       </div>
     </div>
   </div>
@@ -938,7 +1047,7 @@ footer{background:var(--black);border-top:1px solid rgba(255,255,255,.07);paddin
 // SCROLL REVEAL
 const reveals=document.querySelectorAll('.reveal');
 const obs=new IntersectionObserver(entries=>{
-  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}}); 
+  entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target);}});
 },{threshold:.1});
 reveals.forEach(el=>obs.observe(el));
 
@@ -951,36 +1060,237 @@ document.querySelectorAll('.modal-overlay,.story-modal').forEach(m=>{
 function toggleFounder(){
   const sec=document.getElementById('founderSection');
   const btn=document.getElementById('founderBtn');
-  const isOpen=sec.classList.contains('open');
+  if(!sec||!btn) return;
   sec.classList.toggle('open');
   btn.classList.toggle('open');
-  if(!isOpen){
+  if(sec.classList.contains('open')){
     setTimeout(()=>sec.scrollIntoView({behavior:'smooth',block:'start'}),100);
   }
 }
 
 // PILLAR CAROUSEL
 const carousel=document.getElementById('pillarCarousel');
-const dots=document.querySelectorAll('.carousel-dots span');
+if(carousel){
+  let isDown=false,startX,scrollLeft;
+  carousel.addEventListener('mousedown',e=>{isDown=true;carousel.classList.add('dragging');startX=e.pageX-carousel.offsetLeft;scrollLeft=carousel.scrollLeft;});
+  carousel.addEventListener('mouseleave',()=>{isDown=false;carousel.classList.remove('dragging');});
+  carousel.addEventListener('mouseup',()=>{isDown=false;carousel.classList.remove('dragging');});
+  carousel.addEventListener('mousemove',e=>{if(!isDown)return;e.preventDefault();const x=e.pageX-carousel.offsetLeft;carousel.scrollLeft=scrollLeft-(x-startX)*1.5;});
+  carousel.addEventListener('scroll',()=>{
+    const dots=document.querySelectorAll('.carousel-dots span');
+    const cardW=carousel.querySelector('.pillar-card').offsetWidth+16;
+    const idx=Math.round(carousel.scrollLeft/cardW);
+    dots.forEach((d,i)=>d.classList.toggle('active',i===idx));
+  });
+}
+function scrollToCard(idx){
+  const c=document.getElementById('pillarCarousel');
+  if(c) c.scrollTo({left:idx*(c.querySelector('.pillar-card').offsetWidth+16),behavior:'smooth'});
+}
 
-// Drag to scroll
-let isDown=false,startX,scrollLeft;
-carousel.addEventListener('mousedown',e=>{isDown=true;carousel.classList.add('dragging');startX=e.pageX-carousel.offsetLeft;scrollLeft=carousel.scrollLeft;});
-carousel.addEventListener('mouseleave',()=>{isDown=false;carousel.classList.remove('dragging');});
-carousel.addEventListener('mouseup',()=>{isDown=false;carousel.classList.remove('dragging');});
-carousel.addEventListener('mousemove',e=>{if(!isDown)return;e.preventDefault();const x=e.pageX-carousel.offsetLeft;const walk=(x-startX)*1.5;carousel.scrollLeft=scrollLeft-walk;});
+// COACHING DETAILS TOGGLE
+function toggleCoachingDetails(){
+  const el=document.getElementById('coachingExpand');
+  const arrow=document.getElementById('coachingArrow');
+  const btn=document.getElementById('coachingBtn');
+  if(!el) return;
+  const open=el.style.display==='block';
+  el.style.display=open?'none':'block';
+  if(arrow) arrow.style.transform=open?'':'rotate(180deg)';
+  if(btn) btn.style.background=open?'var(--steel)':'var(--iron)';
+  if(!open) setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
 
-// Update dots on scroll
-carousel.addEventListener('scroll',()=>{
-  const cardW=carousel.querySelector('.pillar-card').offsetWidth+16;
-  const idx=Math.round(carousel.scrollLeft/cardW);
-  dots.forEach((d,i)=>d.classList.toggle('active',i===idx));
+// PROGRAMS PAGE OVERLAY
+function openProgramsPage(){
+  const el=document.getElementById('programsPage');
+  if(!el) return;
+  el.style.display='block';
+  document.body.style.overflow='hidden';
+  el.scrollTop=0;
+}
+function closeProgramsPage(){
+  const el=document.getElementById('programsPage');
+  if(!el) return;
+  el.style.display='none';
+  document.body.style.overflow='';
+}
+// Close overlay on ESC key
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') closeProgramsPage();
 });
 
-function scrollToCard(idx){
-  const cardW=carousel.querySelector('.pillar-card').offsetWidth+16;
-  carousel.scrollTo({left:idx*cardW,behavior:'smooth'});
+// CURRICULUM TOGGLE
+function toggleCurriculum(){
+  const el=document.getElementById('curriculumExpand');
+  const arrow=document.getElementById('currArrow');
+  const btn=document.getElementById('currBtn');
+  if(!el) return;
+  const open=el.style.display==='block';
+  el.style.display=open?'none':'block';
+  if(arrow) arrow.style.transform=open?'':'rotate(180deg)';
+  if(btn) btn.style.background=open?'var(--steel)':'var(--iron)';
+  if(!open) setTimeout(()=>el.scrollIntoView({behavior:'smooth',block:'start'}),100);
+}
+
+// LANGUAGE SELECTOR
+function toggleLang(){
+  const dd=document.getElementById('langDropdown');
+  if(dd) dd.classList.toggle('open');
+}
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.lang-selector')){
+    const dd=document.getElementById('langDropdown');
+    if(dd) dd.classList.remove('open');
+  }
+});
+function setLang(lang){
+  const labels={en:'EN',th:'TH',zh:'ZH',fr:'FR',es:'ES',nl:'NL',ar:'AR',ru:'RU'};
+  const names={en:'English',th:'Thai',zh:'Chinese',fr:'French',es:'Spanish',nl:'Dutch',ar:'Arabic',ru:'Russian'};
+  const btn=document.getElementById('langBtn');
+  if(btn) btn.innerHTML='&#127760; '+labels[lang]+' &#9662;';
+  // Mark active option
+  document.querySelectorAll('.lang-option').forEach(opt=>{
+    opt.classList.toggle('active', opt.textContent.trim().includes(names[lang]));
+  });
+  // RTL for Arabic
+  document.documentElement.dir = lang==='ar' ? 'rtl' : 'ltr';
+  const dd=document.getElementById('langDropdown');
+  if(dd) dd.classList.remove('open');
 }
 </script>
+
+
+<!-- PROGRAMS OVERLAY PAGE -->
+<div id="programsPage" style="display:none;position:fixed;inset:0;background:var(--black);z-index:500;overflow-y:auto;">
+  <div style="max-width:1200px;margin:0 auto;padding:80px 48px 80px;">
+
+    <!-- CLOSE BAR -->
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:52px;border-bottom:1px solid rgba(255,255,255,.08);padding-bottom:24px;">
+      <div>
+        <span style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:6px;text-transform:uppercase;color:var(--rust);font-weight:700;display:block;margin-bottom:4px;">All Programs</span>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:36px;letter-spacing:2px;color:var(--white);">IRON MIND PROGRAMS</div>
+      </div>
+      <button onclick="closeProgramsPage()" style="font-family:'Barlow Condensed',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--ash);background:transparent;border:1px solid rgba(255,255,255,.2);padding:12px 24px;cursor:pointer;transition:all .2s;">&#10005; Close</button>
+    </div>
+
+    <p style="font-family:'Barlow Condensed',sans-serif;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--rust);margin-bottom:40px;">Prices in USD and Thai Baht &middot; $1 USD = &#3647;32.57 THB &middot; All programs billed weekly &middot; 4-week minimum</p>
+
+    <!-- PROGRAM 1: YOUTH MENTORSHIP -->
+    <div style="background:var(--iron);border-top:3px solid var(--rust);padding:40px;margin-bottom:2px;">
+      <div style="display:grid;grid-template-columns:1fr 300px;gap:40px;align-items:start;">
+        <div>
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--rust);font-weight:700;display:block;margin-bottom:6px;">Youth Development &middot; Ages 12&ndash;18</span>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,3.5vw,40px);letter-spacing:1px;margin-bottom:10px;">IRON MIND YOUTH MENTORSHIP</div>
+          <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;">
+            <span style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;background:var(--rust);color:var(--black);padding:3px 10px;font-weight:700;">In-Person &middot; Chiang Mai</span>
+            <span style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;background:var(--steel);color:var(--rust);border:1px solid var(--rust);padding:3px 10px;font-weight:700;">Online &middot; Worldwide</span>
+          </div>
+          <p style="font-size:14px;color:var(--ash);line-height:1.8;font-weight:300;margin-bottom:14px;">Live 1-on-1 sessions &mdash; 2 per week &mdash; for young men ages 12&ndash;18. This is not personal training. This is mentorship through life development, fitness principles, and real accountability. Same program, same price, in-person or online.</p>
+          <div style="font-size:13px;color:var(--bone);margin-bottom:16px;"><strong style="color:var(--white);">Focus:</strong> Discipline &middot; Accountability &middot; Goal Setting &middot; Leadership &middot; Mental Toughness &middot; Confidence &middot; Personal Responsibility &middot; Character Development</div>
+          <div style="background:var(--steel);padding:14px 16px;border-left:3px solid var(--rust);margin-bottom:20px;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rust);font-weight:700;margin-bottom:8px;">8 Core Topics</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;">
+              <div style="font-size:12px;color:var(--ash);">Wk 1 &mdash; Building Discipline</div>
+              <div style="font-size:12px;color:var(--ash);">Wk 2 &mdash; Accountability</div>
+              <div style="font-size:12px;color:var(--ash);">Wk 3 &mdash; Goal Setting</div>
+              <div style="font-size:12px;color:var(--ash);">Wk 4 &mdash; Fitness &amp; Life Principles</div>
+              <div style="font-size:12px;color:var(--ash);">Wk 5 &mdash; Leadership Development</div>
+              <div style="font-size:12px;color:var(--ash);">Wk 6 &mdash; Mental Toughness</div>
+              <div style="font-size:12px;color:var(--ash);">Wk 7 &mdash; Confidence &amp; Self-Respect</div>
+              <div style="font-size:12px;color:var(--ash);">Wk 8 &mdash; Long-Term Success Plan</div>
+            </div>
+            <div style="font-size:11px;color:var(--rust);margin-top:8px;font-style:italic;">Continues week-to-week after Week 8 at the same rate</div>
+          </div>
+          <a href="https://calendar.app.google/EU68WKdsb4JYVNzB8" target="_blank" class="btn-primary">Book Free Consultation</a>
+        </div>
+        <div style="background:var(--black);padding:28px;border-top:3px solid var(--rust);text-align:center;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--rust);font-weight:700;margin-bottom:10px;">Weekly Rate</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:64px;color:var(--rust);line-height:1;">$75</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;color:var(--bone);font-weight:600;margin-bottom:4px;">&#3647;2,443 THB</div>
+          <div style="font-size:11px;color:var(--ash);margin-bottom:20px;">Per week &middot; Billed weekly &middot; 4-week min</div>
+          <ul class="include-list" style="margin-bottom:20px;text-align:left;">
+            <li>2 live 1-on-1 sessions/week</li>
+            <li>In-person or online</li>
+            <li>8-topic curriculum</li>
+            <li>Weekly homework &amp; accountability</li>
+            <li>Direct access to coach</li>
+            <li>Continues after Week 8</li>
+          </ul>
+          <a href="https://buy.stripe.com/3cI9AT0CtcWNblMcw74ow06" target="_blank" class="btn-primary" style="display:block;text-align:center;">Pay Now</a>
+          <div style="margin-top:8px;font-size:11px;color:var(--ash);">Consultation required before enrollment</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROGRAM 2: ACCOUNTABILITY COACHING -->
+    <div style="background:var(--iron);border-top:3px solid var(--rust);padding:40px;margin-bottom:2px;">
+      <div style="display:grid;grid-template-columns:1fr 300px;gap:40px;align-items:start;">
+        <div>
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--rust);font-weight:700;display:block;margin-bottom:6px;">For Adults &middot; Men &amp; Women &middot; Online Worldwide</span>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,3.5vw,40px);letter-spacing:1px;margin-bottom:10px;">IRON MIND ACCOUNTABILITY COACHING</div>
+          <p style="font-size:14px;color:var(--ash);line-height:1.8;font-weight:300;margin-bottom:14px;">A direct, ongoing coaching relationship. Two live calls per week with Antonio Green personally &mdash; goal setting, accountability review, mindset coaching, and discipline building. Not a course. Real coaching.</p>
+          <div style="font-size:13px;color:var(--bone);margin-bottom:16px;"><strong style="color:var(--white);">Who it is for:</strong> Men and women who have goals they keep missing and are ready to have someone hold them to a higher standard &mdash; every week, without excuses.</div>
+          <div style="background:var(--steel);padding:14px 16px;border-left:3px solid var(--rust);margin-bottom:20px;">
+            <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:3px;text-transform:uppercase;color:var(--rust);font-weight:700;margin-bottom:8px;">Every Week Includes</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:2px 16px;">
+              <div style="font-size:12px;color:var(--ash);">2 live video calls/week</div>
+              <div style="font-size:12px;color:var(--ash);">Goal setting &amp; review</div>
+              <div style="font-size:12px;color:var(--ash);">Mindset coaching</div>
+              <div style="font-size:12px;color:var(--ash);">Discipline coaching</div>
+              <div style="font-size:12px;color:var(--ash);">Fitness accountability</div>
+              <div style="font-size:12px;color:var(--ash);">Habit &amp; lifestyle structure</div>
+            </div>
+          </div>
+          <a href="https://calendar.app.google/EU68WKdsb4JYVNzB8" target="_blank" class="btn-primary">Book Free Consultation</a>
+        </div>
+        <div style="background:var(--black);padding:28px;border-top:3px solid var(--rust);text-align:center;">
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:4px;text-transform:uppercase;color:var(--rust);font-weight:700;margin-bottom:10px;">One Rate &middot; No Tiers</div>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:64px;color:var(--rust);line-height:1;">$150</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;color:var(--bone);font-weight:600;margin-bottom:4px;">&#3647;4,886 THB</div>
+          <div style="font-size:11px;color:var(--ash);margin-bottom:20px;">Per week &middot; 2 calls/week &middot; Billed weekly</div>
+          <ul class="include-list" style="margin-bottom:20px;text-align:left;">
+            <li>2 live calls/week</li>
+            <li>Goal setting &amp; review</li>
+            <li>Mindset coaching</li>
+            <li>Fitness accountability</li>
+            <li>Habit &amp; lifestyle structure</li>
+            <li>Direct access to coach</li>
+          </ul>
+          <a href="https://buy.stripe.com/cNi9ATbh74qhexY1Rt4ow08" target="_blank" class="btn-primary" style="display:block;text-align:center;">Pay Now</a>
+          <div style="margin-top:8px;font-size:11px;color:var(--ash);">4-week minimum &middot; Cancel anytime after</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROGRAM 3: MEMBERSHIP -->
+    <div style="background:var(--iron);border-top:3px solid var(--rust);padding:40px;">
+      <div style="display:grid;grid-template-columns:1fr 300px;gap:40px;align-items:center;">
+        <div>
+          <span style="font-family:'Barlow Condensed',sans-serif;font-size:10px;letter-spacing:5px;text-transform:uppercase;color:var(--rust);font-weight:700;display:block;margin-bottom:6px;">Community &middot; Open to All</span>
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(26px,3.5vw,40px);letter-spacing:1px;margin-bottom:10px;">IRON MIND MEMBERSHIP</div>
+          <p style="font-size:14px;color:var(--ash);line-height:1.8;font-weight:300;margin-bottom:14px;">A community built around leadership, personal development, faith, fitness, business, relationships, and growth. Monthly live calls and real conversations with people committed to becoming better.</p>
+          <div style="font-size:13px;color:var(--bone);"><strong style="color:var(--white);">Who it is for:</strong> Anyone committed to growth &mdash; men, women, parents, professionals, entrepreneurs.</div>
+        </div>
+        <div style="background:var(--black);padding:28px;border-top:3px solid var(--rust);text-align:center;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:64px;color:var(--rust);line-height:1;">$15</div>
+          <div style="font-family:'Barlow Condensed',sans-serif;font-size:14px;color:var(--bone);font-weight:600;margin-bottom:4px;">&#3647;488 THB</div>
+          <div style="font-size:12px;color:var(--ash);margin-bottom:20px;">Per month &middot; Billed monthly</div>
+          <ul class="include-list" style="margin-bottom:20px;text-align:left;">
+            <li>Monthly live calls</li>
+            <li>Leadership discussions</li>
+            <li>Personal development topics</li>
+            <li>Faith, fitness, business &amp; relationships</li>
+            <li>Community &amp; networking</li>
+          </ul>
+          <a href="https://buy.stripe.com/3cI14ngBraOFahIcw74ow07" target="_blank" class="btn-primary" style="display:block;text-align:center;">Join Now &mdash; $15/Month</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
 </body>
 </html>
